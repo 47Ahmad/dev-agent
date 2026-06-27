@@ -83,17 +83,17 @@
 ### 3️⃣ Smart Project Editor - محرر المشاريع المتقدم
 
 #### 3.1 - Project Explorer
-- [ ] تصميم Project Explorer Panel
-- [ ] تطبيق File Tree Navigation
+- [x] تصميم Project Explorer Panel
+- [x] تطبيق File Tree Navigation
 - [ ] إضافة Create File/Folder
 - [ ] تطبيق Delete File/Folder
 - [ ] إضافة Rename File/Folder
 - [ ] تطبيق Drag & Drop
 
 #### 3.2 - Code Editor
-- [ ] تطبيق Code Viewer
+- [x] تطبيق Code Viewer
 - [ ] إضافة Syntax Highlighting
-- [ ] تطبيق Code Editing
+- [x] تطبيق Code Editing
 - [ ] إضافة Auto-save
 - [ ] تطبيق Undo/Redo
 - [ ] إضافة Search & Replace

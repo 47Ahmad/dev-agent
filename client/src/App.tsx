@@ -16,6 +16,8 @@ import BillingPage from "./pages/BillingPage";
 import ProfilePage from "./pages/ProfilePage";
 import AuthPage from "./pages/AuthPage";
 import ProjectBuilder from "./pages/ProjectBuilder";
+import ProjectEditor from "./pages/ProjectEditor";
+import PromptTemplates from "./pages/PromptTemplates";
 
 function Router() {
   return (
@@ -33,6 +35,8 @@ function Router() {
       <Route path="/settings" component={SettingsPage} />
       <Route path="/profile" component={ProfilePage} />
       <Route path="/project-builder" component={ProjectBuilder} />
+      <Route path="/projects/:id/editor" component={ProjectEditor} />
+      <Route path="/prompt-templates" component={PromptTemplates} />
       <Route path="/404" component={NotFound} />
       <Route component={NotFound} />
     </Switch>
