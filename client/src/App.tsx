@@ -4,15 +4,34 @@ import NotFound from "@/pages/NotFound";
 import { Route, Switch } from "wouter";
 import ErrorBoundary from "./components/ErrorBoundary";
 import { ThemeProvider } from "./contexts/ThemeContext";
-import Home from "./pages/Home";
+import { SessionProvider } from "./contexts/SessionContext";
+import LandingPage from "./pages/LandingPage";
+import DashboardV2 from "./pages/DashboardV2";
+import ProjectsDashboard from "./pages/ProjectsDashboard";
+import SettingsPage from "./pages/SettingsPage";
+import TemplatesPage from "./pages/TemplatesPage";
+import MarketplacePage from "./pages/MarketplacePage";
+import DeploymentsPage from "./pages/DeploymentsPage";
+import BillingPage from "./pages/BillingPage";
+import ProfilePage from "./pages/ProfilePage";
+import AuthPage from "./pages/AuthPage";
 
 function Router() {
-  // make sure to consider if you need authentication for certain routes
   return (
     <Switch>
-      <Route path={"/"} component={Home} />
-      <Route path={"/404"} component={NotFound} />
-      {/* Final fallback route */}
+      <Route path="/" component={LandingPage} />
+      <Route path="/auth" component={AuthPage} />
+      <Route path="/login" component={AuthPage} />
+      <Route path="/register" component={AuthPage} />
+      <Route path="/dashboard" component={DashboardV2} />
+      <Route path="/projects" component={ProjectsDashboard} />
+      <Route path="/templates" component={TemplatesPage} />
+      <Route path="/marketplace" component={MarketplacePage} />
+      <Route path="/deployments" component={DeploymentsPage} />
+      <Route path="/billing" component={BillingPage} />
+      <Route path="/settings" component={SettingsPage} />
+      <Route path="/profile" component={ProfilePage} />
+      <Route path="/404" component={NotFound} />
       <Route component={NotFound} />
     </Switch>
   );
@@ -26,14 +45,13 @@ function Router() {
 function App() {
   return (
     <ErrorBoundary>
-      <ThemeProvider
-        defaultTheme="light"
-        // switchable
-      >
-        <TooltipProvider>
-          <Toaster />
-          <Router />
-        </TooltipProvider>
+      <ThemeProvider defaultTheme="dark">
+        <SessionProvider>
+          <TooltipProvider>
+            <Toaster />
+            <Router />
+          </TooltipProvider>
+        </SessionProvider>
       </ThemeProvider>
     </ErrorBoundary>
   );

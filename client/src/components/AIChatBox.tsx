@@ -10,8 +10,10 @@ import { Streamdown } from "streamdown";
  * Message type matching server-side LLM Message interface
  */
 export type Message = {
-  role: "system" | "user" | "assistant";
-  content: string;
+  role: "system" | "user" | "assistant" | "tool" | "function";
+  content: string | { type: string; [key: string]: unknown };
+  name?: string;
+  tool_call_id?: string;
 };
 
 export type AIChatBoxProps = {
@@ -262,11 +264,11 @@ export function AIChatBox({
                     >
                       {message.role === "assistant" ? (
                         <div className="prose prose-sm dark:prose-invert max-w-none">
-                          <Streamdown>{message.content}</Streamdown>
+                          <Streamdown>{typeof message.content === 'string' ? message.content : JSON.stringify(message.content)}</Streamdown>
                         </div>
                       ) : (
                         <p className="whitespace-pre-wrap text-sm">
-                          {message.content}
+                          {typeof message.content === 'string' ? message.content : JSON.stringify(message.content)}
                         </p>
                       )}
                     </div>
