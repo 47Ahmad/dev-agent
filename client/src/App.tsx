@@ -15,6 +15,7 @@ import DeploymentsPage from "./pages/DeploymentsPage";
 import BillingPage from "./pages/BillingPage";
 import ProfilePage from "./pages/ProfilePage";
 import AuthPage from "./pages/AuthPage";
+import ProjectBuilder from "./pages/ProjectBuilder";
 
 function Router() {
   return (
@@ -31,6 +32,7 @@ function Router() {
       <Route path="/billing" component={BillingPage} />
       <Route path="/settings" component={SettingsPage} />
       <Route path="/profile" component={ProfilePage} />
+      <Route path="/project-builder" component={ProjectBuilder} />
       <Route path="/404" component={NotFound} />
       <Route component={NotFound} />
     </Switch>
