@@ -18,14 +18,24 @@ import AuthPage from "./pages/AuthPage";
 import ProjectBuilder from "./pages/ProjectBuilder";
 import ProjectEditor from "./pages/ProjectEditor";
 import PromptTemplates from "./pages/PromptTemplates";
+import Login from "./pages/Login";
+import Register from "./pages/Register";
+import ForgotPassword from "./pages/ForgotPassword";
+import ResetPassword from "./pages/ResetPassword";
+import EmailVerification from "./pages/EmailVerification";
+import UserDashboard from "./pages/UserDashboard";
 
 function Router() {
   return (
     <Switch>
       <Route path="/" component={LandingPage} />
       <Route path="/auth" component={AuthPage} />
-      <Route path="/login" component={AuthPage} />
-      <Route path="/register" component={AuthPage} />
+      <Route path="/login" component={Login} />
+      <Route path="/register" component={Register} />
+      <Route path="/forgot-password" component={ForgotPassword} />
+      <Route path="/reset-password" component={ResetPassword} />
+      <Route path="/verify-email" component={EmailVerification} />
+      <Route path="/user-dashboard" component={UserDashboard} />
       <Route path="/dashboard" component={DashboardV2} />
       <Route path="/projects" component={ProjectsDashboard} />
       <Route path="/templates" component={TemplatesPage} />
