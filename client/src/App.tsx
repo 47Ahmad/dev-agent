@@ -26,6 +26,7 @@ import EmailVerification from "./pages/EmailVerification";
 import UserDashboard from "./pages/UserDashboard";
 import ProjectManager from "./pages/ProjectManager";
 import AdvancedAIWorkspace from "./pages/AdvancedAIWorkspace";
+import LivePreview from "./pages/LivePreview";
 
 function Router() {
   return (
@@ -40,6 +41,7 @@ function Router() {
       <Route path="/user-dashboard" component={UserDashboard} />
       <Route path="/project-manager" component={ProjectManager} />
       <Route path="/ai-workspace" component={AdvancedAIWorkspace} />
+      <Route path="/live-preview" component={LivePreview} />
       <Route path="/dashboard" component={DashboardV2} />
       <Route path="/projects" component={ProjectsDashboard} />
       <Route path="/templates" component={TemplatesPage} />
