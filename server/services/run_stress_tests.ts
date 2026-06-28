@@ -1,4 +1,4 @@
-import { runStressTest, generateStressTestReport } from '../server/services/stressTestingSystem';
+import { runStressTest, generateStressTestReport } from './stressTestingSystem';
 import fs from 'fs';
 import path from 'path';
 

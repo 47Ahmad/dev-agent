@@ -550,3 +550,43 @@ export async function updateApiKeyLastUsed(keyId: string) {
 
   await db.update(apiKeys).set({ lastUsedAt: new Date() }).where(eq(apiKeys.id, keyId));
 }
+export async function getProjectFilesList(projectId: string) {
+  return getProjectFiles(projectId);
+}
+
+export async function getProjectFileContent(projectId: string, filePath: string) {
+  const db = await getDb();
+  if (!db) return null;
+  const result = await db.select().from(projectFiles).where(and(eq(projectFiles.projectId, projectId), eq(projectFiles.path, filePath))).limit(1);
+  return result.length > 0 ? result[0].content : null;
+}
+
+export async function saveProjectFile(projectId: string, filePath: string, content: string) {
+  const db = await getDb();
+  if (!db) throw new Error("Database not available");
+  
+  const existingFile = await db.select().from(projectFiles).where(and(eq(projectFiles.projectId, projectId), eq(projectFiles.path, filePath))).limit(1);
+  
+  if (existingFile.length > 0) {
+    await db.update(projectFiles).set({ content, updatedAt: new Date() }).where(eq(projectFiles.id, existingFile[0].id));
+  } else {
+    const name = filePath.split('/').pop() || filePath;
+    await createProjectFile(projectId, name, filePath, 'file', content);
+  }
+}
+
+export async function deleteProjectFile(projectId: string, filePath: string) {
+  const db = await getDb();
+  if (!db) throw new Error("Database not available");
+  await db.delete(projectFiles).where(and(eq(projectFiles.projectId, projectId), eq(projectFiles.path, filePath)));
+}
+
+export async function getProjectContext(projectId: string): Promise<any> {
+  // Mock implementation for now
+  return null;
+}
+
+export async function saveProjectContext(context: any) {
+  // Mock implementation for now
+  return null;
+}
