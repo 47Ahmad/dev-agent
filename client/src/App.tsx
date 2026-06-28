@@ -24,6 +24,7 @@ import ForgotPassword from "./pages/ForgotPassword";
 import ResetPassword from "./pages/ResetPassword";
 import EmailVerification from "./pages/EmailVerification";
 import UserDashboard from "./pages/UserDashboard";
+import ProjectManager from "./pages/ProjectManager";
 
 function Router() {
   return (
@@ -36,6 +37,7 @@ function Router() {
       <Route path="/reset-password" component={ResetPassword} />
       <Route path="/verify-email" component={EmailVerification} />
       <Route path="/user-dashboard" component={UserDashboard} />
+      <Route path="/project-manager" component={ProjectManager} />
       <Route path="/dashboard" component={DashboardV2} />
       <Route path="/projects" component={ProjectsDashboard} />
       <Route path="/templates" component={TemplatesPage} />
