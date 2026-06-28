@@ -25,6 +25,7 @@ import ResetPassword from "./pages/ResetPassword";
 import EmailVerification from "./pages/EmailVerification";
 import UserDashboard from "./pages/UserDashboard";
 import ProjectManager from "./pages/ProjectManager";
+import AdvancedAIWorkspace from "./pages/AdvancedAIWorkspace";
 
 function Router() {
   return (
@@ -38,6 +39,7 @@ function Router() {
       <Route path="/verify-email" component={EmailVerification} />
       <Route path="/user-dashboard" component={UserDashboard} />
       <Route path="/project-manager" component={ProjectManager} />
+      <Route path="/ai-workspace" component={AdvancedAIWorkspace} />
       <Route path="/dashboard" component={DashboardV2} />
       <Route path="/projects" component={ProjectsDashboard} />
       <Route path="/templates" component={TemplatesPage} />
