@@ -10,6 +10,8 @@ import { analyzeProjectStructure } from "../services/aiExecutionEngine";
 import type { AgentType } from "./types";
 import { updateAgentStatus } from "./agentStateManager";
 import { sendMessage } from "./agentCommunication";
+import { SaveMemory, RememberCodePattern } from "../memory/memoryAPI";
+import { addKnowledge } from "../memory/knowledgeManager";
 
 // ============================================
 // ARCHITECT AGENT IDENTITY
@@ -139,6 +141,31 @@ export async function designSolution(params: {
     };
 
     architecturalDesigns.set(designId, design);
+
+    // Phase 4B: Save design to memory
+    SaveMemory({
+      tier: "short_term",
+      category: "architectural_design",
+      key: `design:${designId}`,
+      content: `Design for: ${params.command}\nApproach: ${design.solution.approach}\nComplexity: ${design.solution.estimatedComplexity}`,
+      projectId: params.projectId,
+      agentId: "architect",
+      importance: 0.8,
+      tags: ["design", "architecture"],
+    });
+
+    // Phase 4B: Save architectural knowledge
+    addKnowledge({
+      title: `Architecture: ${params.command.substring(0, 60)}`,
+      content: design.solution.approach,
+      summary: `Complexity: ${design.solution.estimatedComplexity}. Files to modify: ${design.solution.filesToModify.length}. Files to create: ${design.solution.filesToCreate.length}.`,
+      category: "architectural_design",
+      projectId: params.projectId,
+      agentId: "architect",
+      importance: 0.8,
+      source: "architect_agent",
+      tags: ["architecture", design.solution.estimatedComplexity],
+    });
 
     // Notify orchestrator with the design
     sendMessage({

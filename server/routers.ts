@@ -13,6 +13,7 @@ import { projectManagementRouter } from "./routers/projectManagement";
 import { projectFilesRouter } from "./routers/projectFiles";
 import { aiExecutionRouter } from "./routers/aiExecution";
 import { multiAgentRouter } from "./routers/multiAgent";
+import { memorySystemRouter } from "./routers/memorySystem";
 
 export const appRouter = router({
     // if you need to use socket.io, read and register route in server/_core/index.ts, all api should start with '/api/' so that the gateway can route correctly
@@ -39,6 +40,7 @@ export const appRouter = router({
   projectFiles: projectFilesRouter,
   aiExecution: aiExecutionRouter,
   multiAgent: multiAgentRouter,
+  memorySystem: memorySystemRouter,
 });
 
 export type AppRouter = typeof appRouter;

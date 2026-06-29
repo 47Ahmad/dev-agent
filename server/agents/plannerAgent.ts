@@ -9,6 +9,8 @@ import { invokeLLM } from "../_core/llm";
 import type { ExecutionPlan, ExecutionStep, AgentType } from "./types";
 import { updateAgentStatus, markTaskCompleted, markTaskFailed } from "./agentStateManager";
 import { sendMessage } from "./agentCommunication";
+import { SaveMemory, RecallContext } from "../memory/memoryAPI";
+import { addKnowledge } from "../memory/knowledgeManager";
 
 // ============================================
 // PLANNER AGENT IDENTITY
@@ -103,6 +105,30 @@ export async function createExecutionPlan(params: {
 
     executionPlans.set(planId, plan);
     logs.push(`[Planner] Plan created with ${steps.length} steps`);
+
+    // Phase 4B: Save plan to memory
+    SaveMemory({
+      tier: "short_term",
+      category: "task_result",
+      key: `plan:${planId}`,
+      content: `Plan for: ${params.command}\nSteps: ${steps.map((s) => s.title).join(", ")}`,
+      projectId: params.projectId,
+      agentId: "planner",
+      importance: 0.75,
+      tags: ["plan", "execution_plan"],
+    });
+
+    // Phase 4B: Save as knowledge for future reuse
+    addKnowledge({
+      title: `Plan: ${params.command.substring(0, 60)}`,
+      content: steps.map((s) => `${s.order}. [${s.agentType}] ${s.title}: ${s.description}`).join("\n"),
+      category: "task_result",
+      projectId: params.projectId,
+      agentId: "planner",
+      importance: 0.7,
+      source: "planner_agent",
+      tags: ["plan", "execution_plan"],
+    });
 
     // Notify orchestrator
     sendMessage({
