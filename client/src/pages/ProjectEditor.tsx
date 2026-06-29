@@ -18,9 +18,13 @@ import {
   AlertCircle,
   CheckCircle2,
   Loader2,
+  Zap,
 } from "lucide-react";
 import { trpc } from "@/lib/trpc";
 import { toast } from "sonner";
+import { AICommandPanel } from "@/components/AICommandPanel";
+import { SmartDiffPreview } from "@/components/SmartDiffPreview";
+import { AutoDebuggerPanel } from "@/components/AutoDebuggerPanel";
 
 interface ProjectFile {
   id: string;
@@ -49,6 +53,12 @@ export default function ProjectEditor({ params }: ProjectEditorProps) {
   ]);
   const [isLoading, setIsLoading] = useState(true);
   const [isSaving, setIsSaving] = useState(false);
+
+  // AI Execution State
+  const [showDiffPreview, setShowDiffPreview] = useState(false);
+  const [diffData, setDiffData] = useState<any>(null);
+  const [showDebugger, setShowDebugger] = useState(false);
+  const [debugData, setDebugData] = useState<any>(null);
 
   // Load project files
   const { data: projectFiles, isLoading: isLoadingFiles } = trpc.projectFiles.getProjectFiles.useQuery(
@@ -119,6 +129,33 @@ export default function ProjectEditor({ params }: ProjectEditorProps) {
       content: selectedFile.content,
       language: selectedFile.language,
     });
+  };
+
+  const handleCommandExecuted = (result: any) => {
+    if (result.filesChanged || result.newFiles || result.deletedFiles) {
+      setDiffData(result);
+      setShowDiffPreview(true);
+      setActiveTab("ai");
+    }
+    setTerminal((prev) => [
+      ...prev,
+      `[AI] ${result.message}`,
+      ...(result.logs || []),
+    ]);
+  };
+
+  const handleShowDebug = (debug: any) => {
+    setDebugData(debug);
+    setShowDebugger(true);
+    setActiveTab("ai");
+  };
+
+  const handleApplyDiff = async () => {
+    if (!diffData) return;
+    toast.success("تم تطبيق التغييرات!");
+    setShowDiffPreview(false);
+    // Reload files
+    setActiveTab("explorer");
   };
 
   return (
@@ -219,7 +256,7 @@ export default function ProjectEditor({ params }: ProjectEditorProps) {
         {/* Editor & Preview */}
         <div className="lg:col-span-3">
           <Tabs value={activeTab} onValueChange={setActiveTab} className="h-full">
-            <TabsList className="grid w-full grid-cols-4 bg-card/50 border border-border/50">
+            <TabsList className="grid w-full grid-cols-5 bg-card/50 border border-border/50">
               <TabsTrigger value="explorer" className="flex items-center gap-2">
                 <Code className="w-4 h-4" />
                 <span className="hidden sm:inline">محرر</span>
@@ -235,6 +272,10 @@ export default function ProjectEditor({ params }: ProjectEditorProps) {
               <TabsTrigger value="timeline" className="flex items-center gap-2">
                 <Clock className="w-4 h-4" />
                 <span className="hidden sm:inline">السجل</span>
+              </TabsTrigger>
+              <TabsTrigger value="ai" className="flex items-center gap-2">
+                <Zap className="w-4 h-4" />
+                <span className="hidden sm:inline">AI</span>
               </TabsTrigger>
             </TabsList>
 
@@ -355,6 +396,35 @@ export default function ProjectEditor({ params }: ProjectEditorProps) {
                   </div>
                 </div>
               </Card>
+            </TabsContent>
+
+            {/* AI Tab */}
+            <TabsContent value="ai" className="mt-4 space-y-4">
+              {/* AI Command Panel */}
+              <AICommandPanel
+                projectId={projectId}
+                onCommandExecuted={handleCommandExecuted}
+                onShowDebug={handleShowDebug}
+              />
+
+              {/* Smart Diff Preview */}
+              {showDiffPreview && diffData && (
+                <SmartDiffPreview
+                  filesChanged={diffData.filesChanged}
+                  newFiles={diffData.newFiles}
+                  deletedFiles={diffData.deletedFiles}
+                  onApply={handleApplyDiff}
+                  onReject={() => setShowDiffPreview(false)}
+                />
+              )}
+
+              {/* Auto Debugger Panel */}
+              {showDebugger && debugData && (
+                <AutoDebuggerPanel
+                  errors={debugData.errors}
+                  onDismiss={() => setShowDebugger(false)}
+                />
+              )}
             </TabsContent>
           </Tabs>
         </div>
