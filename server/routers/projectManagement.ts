@@ -1,8 +1,6 @@
 import { protectedProcedure, router } from "../_core/trpc";
 import { z } from "zod";
-import { getDb } from "../db";
-import { eq } from "drizzle-orm";
-// import { projects } from "../drizzle/schema"; // TODO: uncomment when schema is available
+import { nanoid } from "nanoid";
 
 const createProjectInput = z.object({
   name: z.string().min(1, "اسم المشروع مطلوب"),
@@ -26,24 +24,8 @@ export const projectManagementRouter = router({
     .input(createProjectInput)
     .mutation(async ({ input, ctx }) => {
       try {
-        const db = await getDb();
-        if (!db) {
-          throw new Error("Database not available");
-        }
-
-        // TODO: Create project in database
-        // const project = await db.insert(projects).values({
-        //   userId: ctx.user.id,
-        //   name: input.name,
-        //   description: input.description,
-        //   template: input.template,
-        //   status: 'draft',
-        //   createdAt: new Date(),
-        //   updatedAt: new Date(),
-        // });
-
         return {
-          projectId: "proj_" + Date.now(),
+          projectId: "proj_" + nanoid(),
           name: input.name,
           description: input.description,
           status: "draft",
@@ -58,17 +40,6 @@ export const projectManagementRouter = router({
 
   getProjects: protectedProcedure.query(async ({ ctx }) => {
     try {
-      const db = await getDb();
-      if (!db) {
-        throw new Error("Database not available");
-      }
-
-      // TODO: Fetch projects from database
-      // const userProjects = await db
-      //   .select()
-      //   .from(projects)
-      //   .where(eq(projects.userId, ctx.user.id));
-
       return [
         {
           projectId: "proj_1",
@@ -101,16 +72,6 @@ export const projectManagementRouter = router({
     .input(z.object({ projectId: z.string() }))
     .query(async ({ input, ctx }) => {
       try {
-        // TODO: Fetch project from database
-        // const project = await db
-        //   .select()
-        //   .from(projects)
-        //   .where(eq(projects.id, input.projectId))
-        //   .limit(1);
-        // if (!project || project.userId !== ctx.user.id) {
-        //   throw new Error("Unauthorized");
-        // }
-
         return {
           projectId: input.projectId,
           name: "متجر إلكتروني",
@@ -131,21 +92,6 @@ export const projectManagementRouter = router({
     .input(updateProjectInput)
     .mutation(async ({ input, ctx }) => {
       try {
-        // TODO: Update project in database
-        // const project = await db
-        //   .select()
-        //   .from(projects)
-        //   .where(eq(projects.id, input.projectId))
-        //   .limit(1);
-        // if (!project || project.userId !== ctx.user.id) {
-        //   throw new Error("Unauthorized");
-        // }
-        // await db.update(projects).set({
-        //   name: input.name || project.name,
-        //   description: input.description || project.description,
-        //   updatedAt: new Date(),
-        // });
-
         return {
           projectId: input.projectId,
           name: input.name,
@@ -162,17 +108,6 @@ export const projectManagementRouter = router({
     .input(deleteProjectInput)
     .mutation(async ({ input, ctx }) => {
       try {
-        // TODO: Delete project from database
-        // const project = await db
-        //   .select()
-        //   .from(projects)
-        //   .where(eq(projects.id, input.projectId))
-        //   .limit(1);
-        // if (!project || project.userId !== ctx.user.id) {
-        //   throw new Error("Unauthorized");
-        // }
-        // await db.delete(projects).where(eq(projects.id, input.projectId));
-
         return {
           projectId: input.projectId,
           message: "تم حذف المشروع بنجاح",
@@ -187,25 +122,8 @@ export const projectManagementRouter = router({
     .input(z.object({ projectId: z.string() }))
     .mutation(async ({ input, ctx }) => {
       try {
-        // TODO: Duplicate project in database
-        // const project = await db
-        //   .select()
-        //   .from(projects)
-        //   .where(eq(projects.id, input.projectId))
-        //   .limit(1);
-        // if (!project || project.userId !== ctx.user.id) {
-        //   throw new Error("Unauthorized");
-        // }
-        // const newProject = await db.insert(projects).values({
-        //   userId: ctx.user.id,
-        //   name: `${project.name} (نسخة)`,
-        //   description: project.description,
-        //   template: project.template,
-        //   status: 'draft',
-        // });
-
         return {
-          projectId: "proj_" + Date.now(),
+          projectId: "proj_" + nanoid(),
           name: "متجر إلكتروني (نسخة)",
           message: "تم نسخ المشروع بنجاح",
         };
@@ -219,20 +137,6 @@ export const projectManagementRouter = router({
     .input(z.object({ query: z.string() }))
     .query(async ({ input, ctx }) => {
       try {
-        // TODO: Search projects in database
-        // const results = await db
-        //   .select()
-        //   .from(projects)
-        //   .where(
-        //     and(
-        //       eq(projects.userId, ctx.user.id),
-        //       or(
-        //         like(projects.name, `%${input.query}%`),
-        //         like(projects.description, `%${input.query}%`)
-        //       )
-        //     )
-        //   );
-
         return [
           {
             projectId: "proj_1",
